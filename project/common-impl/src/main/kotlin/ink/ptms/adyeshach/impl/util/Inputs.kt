@@ -1,12 +1,12 @@
 package ink.ptms.adyeshach.impl.util
 
 import ink.ptms.adyeshach.core.Adyeshach
-import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
+import taboolib.module.chat.Components
 import taboolib.library.xseries.XMaterial
 import taboolib.platform.util.buildBook
 import taboolib.platform.util.giveItem
@@ -41,12 +41,11 @@ object Inputs {
     private fun onEdit(e: PlayerEditBookEvent) {
         if (e.previousBookMeta.displayName == Adyeshach.api().getLanguage().getLang(e.player, "editor-input-book-name")) {
             val listen = bookData.remove(e.player.name) ?: return
-            val lines = e.newBookMeta.pages.flatMap {
-                var legacyText = TextComponent(it).toLegacyText()
-                if (legacyText.startsWith('§')) {
-                    legacyText = legacyText.substring(2)
-                }
-                legacyText.split("\n")
+            val lines = e.newBookMeta.pages.flatMap { page ->
+                val legacyText = runCatching { Components.parseRaw(page).toLegacyText() }
+                    .getOrElse { Components.text(page, color = false).toLegacyText() }
+                val trimmed = if (legacyText.startsWith('§')) legacyText.substring(2) else legacyText
+                trimmed.split("\n")
             }
             listen.accept(lines)
             submit(delay = 1) {

@@ -6,7 +6,6 @@ import ink.ptms.adyeshach.core.bukkit.BukkitPose
 import ink.ptms.adyeshach.core.bukkit.data.VillagerData
 import ink.ptms.adyeshach.core.entity.type.AdySniffer
 import ink.ptms.adyeshach.core.util.getEnumOrNull
-import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Art
 import org.bukkit.Material
 import org.bukkit.entity.Cat
@@ -18,6 +17,7 @@ import org.bukkit.util.Vector
 import taboolib.common5.Quat
 import taboolib.common5.cdouble
 import taboolib.library.xseries.XMaterial
+import taboolib.module.chat.Components
 import taboolib.module.nms.MinecraftVersion
 
 /**
@@ -46,8 +46,8 @@ class PrepareMetaTypeCustom(val type: CustomType) : PrepareMetaType {
             CustomType.OPT_BLOCK_POS -> PrepareMetaNatural(name, parseVector(args), "OptBlockPos")
             CustomType.OPT_BLOCK_ID -> PrepareMetaNatural(name, MaterialData(Material.AIR), "OptBlockID")
             CustomType.BLOCK_ID -> PrepareMetaNatural(name, MaterialData(Material.AIR), "BlockID")
-            CustomType.OPT_CHAT -> PrepareMetaNatural(name, TextComponent(""), "OptChat")
-            CustomType.CHAT -> PrepareMetaNatural(name, TextComponent(""), "Chat")
+            CustomType.OPT_CHAT -> PrepareMetaNatural(name, Components.empty(), "OptChat")
+            CustomType.CHAT -> PrepareMetaNatural(name, Components.empty(), "Chat")
             CustomType.VILLAGER_DATA -> PrepareMetaNatural(name, VillagerData(), "VillagerData")
             CustomType.BUKKIT_POSE -> PrepareMetaNatural(name, BukkitPose.STANDING, "BukkitPose")
             CustomType.VECTOR3 -> PrepareMetaNatural(name, parseVector(args), "Vector3")

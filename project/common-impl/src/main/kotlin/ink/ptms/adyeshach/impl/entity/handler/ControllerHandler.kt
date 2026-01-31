@@ -9,6 +9,7 @@ import ink.ptms.adyeshach.core.event.AdyeshachControllerRemoveEvent
 import ink.ptms.adyeshach.impl.entity.DefaultEntityInstance
 import ink.ptms.adyeshach.impl.util.ChunkAccess
 import org.bukkit.Location
+import org.bukkit.entity.Entity
 import java.util.*
 
 /**
@@ -69,11 +70,11 @@ open class ControllerHandler(protected val self: DefaultEntityInstance) : Contro
         self.controller.forEach { unregisterController(it.javaClass) }
     }
 
-    override fun controllerLookAt(entity: org.bukkit.entity.Entity) {
+    override fun controllerLookAt(entity: Entity) {
         self.bionicSight?.setLookAt(entity)
     }
 
-    override fun controllerLookAt(entity: org.bukkit.entity.Entity, yMaxRotSpeed: Float, xMaxRotAngle: Float) {
+    override fun controllerLookAt(entity: Entity, yMaxRotSpeed: Float, xMaxRotAngle: Float) {
         self.bionicSight?.setLookAt(entity, yMaxRotSpeed, xMaxRotAngle)
     }
 

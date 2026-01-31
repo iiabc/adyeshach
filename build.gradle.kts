@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     id("io.izzel.taboolib") version "2.0.23" apply false
-    id("org.jetbrains.kotlin.jvm") version "1.8.22" apply false
+    id("org.jetbrains.kotlin.jvm") version "1.9.24" apply false
 }
 
 subprojects {
@@ -25,6 +25,8 @@ subprojects {
     }
     repositories {
         mavenLocal()
+        maven { url = uri("https://repo.codemc.io/repository/maven-releases/") }
+        maven { url = uri("https://repo.codemc.io/repository/maven-snapshots/") }
         maven { url = uri("https://repo.spongepowered.org/maven") }
         mavenCentral()
     }
@@ -40,6 +42,7 @@ subprojects {
         compileOnly("org.spongepowered:math:2.0.1")
         // download
         compileOnly("com.github.ben-manes.caffeine:caffeine:2.9.3")
+        compileOnly("com.github.retrooper:packetevents-spigot:2.11.2")
     }
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"

@@ -16,7 +16,9 @@ taboolib {
             name("Citizens").optional(true)
             name("ServerNPC").optional(true)
             name("ModelEngine").optional(true)
+            name("BetterModel").optional(true)
             name("BetonQuest").optional(true)
+            name("packetevents")
         }
     }
     // asm

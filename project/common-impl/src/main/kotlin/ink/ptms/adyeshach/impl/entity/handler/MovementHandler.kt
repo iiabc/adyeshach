@@ -11,6 +11,7 @@ import ink.ptms.adyeshach.core.util.fixYaw
 import ink.ptms.adyeshach.core.util.ifloor
 import ink.ptms.adyeshach.impl.entity.DefaultEntityInstance
 import ink.ptms.adyeshach.impl.util.ChunkAccess
+import org.bukkit.Particle
 import org.bukkit.util.Vector
 import taboolib.common.util.random
 import java.util.concurrent.TimeUnit
@@ -85,7 +86,7 @@ open class MovementHandler(protected val self: DefaultEntityInstance) {
         }
         // 调试模式下显示路径
         if (AdyeshachSettings.debug) {
-            self.world.spawnParticle(org.bukkit.Particle.VILLAGER_HAPPY, next.x, next.y, next.z, 2, 0.0, 0.0, 0.0, 0.0)
+            self.world.spawnParticle(Particle.VILLAGER_HAPPY, next.x, next.y, next.z, 2, 0.0, 0.0, 0.0, 0.0)
         }
     }
 

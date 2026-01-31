@@ -466,6 +466,9 @@ editor-meta-visible-after-loaded-description: |-
 editor-meta-model-engine: '模型引擎'
 editor-meta-model-engine-description: |-
   绑定 ModelEngine 插件的模型
+editor-meta-better-model: 'BetterModel'
+editor-meta-better-model-description: |-
+  绑定 BetterModel 插件的模型
 editor-meta-die: '死亡状态'
 editor-meta-die-description: |-
   &c利用客户端渲染漏洞实现的特殊状态, 无法保证稳定性

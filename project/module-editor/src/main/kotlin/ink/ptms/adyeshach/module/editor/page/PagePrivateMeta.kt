@@ -3,6 +3,7 @@ package ink.ptms.adyeshach.module.editor.page
 import ink.ptms.adyeshach.core.Adyeshach
 import ink.ptms.adyeshach.core.AdyeshachSettings
 import ink.ptms.adyeshach.core.bukkit.BukkitRotation
+import ink.ptms.adyeshach.core.entity.BetterModelView
 import ink.ptms.adyeshach.core.entity.*
 import ink.ptms.adyeshach.core.entity.type.*
 import ink.ptms.adyeshach.module.editor.EditPanel
@@ -125,6 +126,12 @@ class PagePrivateMeta(editor: EditPanel) : MetaPage(editor) {
             groups += SimpleGroup("angle-right-arm", 8, BukkitRotation.RIGHT_ARM.toActions())
             groups += SimpleGroup("angle-left-leg", 8, BukkitRotation.LEFT_LEG.toActions())
             groups += SimpleGroup("angle-right-leg", 8, BukkitRotation.RIGHT_LEG.toActions())
+        }
+        // BetterModel
+        if (entity is BetterModelView) {
+            groups ah extras0(
+                SimpleAction.Meta("better-model", EditType.SIGN, entity.betterModelName, true)
+            )
         }
         // 展示实体
         if (entity is AdyDisplay) {

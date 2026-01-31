@@ -1,6 +1,7 @@
 package ink.ptms.adyeshach.module.editor.action
 
 import ink.ptms.adyeshach.core.entity.EntityInstance
+import ink.ptms.adyeshach.core.util.Components
 import ink.ptms.adyeshach.module.editor.EditType
 import ink.ptms.adyeshach.module.editor.lang
 import ink.ptms.adyeshach.module.editor.page.Page
@@ -56,7 +57,8 @@ abstract class SimpleAction(val id: String) : Action {
         }
 
         override fun description(player: Player): String? {
-            return if (hasDescription) player.lang("meta-${node.toLocaleKey()}-description") else value?.let { "&7$it".colored() }
+            return if (hasDescription) player.lang("meta-${node.toLocaleKey()}-description")
+            else value?.let { "&7${Components.toLegacyText(it)}".colored() }
         }
 
         override fun isResettable(): Boolean {

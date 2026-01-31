@@ -82,7 +82,14 @@ open class PositionHandler(protected val self: DefaultEntityInstance) {
                 location.modify(yaw = self.entityType.fixYaw(location.yaw))
             )
         } else {
+            self.position = newPosition
             self.clientPosition = newPosition
+            Adyeshach.api().getMinecraftAPI().getEntityOperator().teleportEntity(
+                self.getVisiblePlayers(),
+                self.index,
+                location.modify(yaw = self.entityType.fixYaw(location.yaw)),
+                onGround = !self.entityPathType.isFly()
+            )
         }
         
         // 只有在位置发生变更时才进行 passengers 同步

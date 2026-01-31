@@ -2,13 +2,14 @@ package ink.ptms.adyeshach.module.editor.meta
 
 import ink.ptms.adyeshach.core.bukkit.*
 import ink.ptms.adyeshach.core.bukkit.data.VillagerData
+import ink.ptms.adyeshach.core.entity.BetterModelView
 import ink.ptms.adyeshach.core.entity.EntityInstance
 import ink.ptms.adyeshach.core.entity.Meta
 import ink.ptms.adyeshach.core.entity.type.*
 import ink.ptms.adyeshach.module.editor.EditType
 import ink.ptms.adyeshach.module.editor.meta.impl.*
-import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.ChatColor
+import taboolib.module.chat.ComponentText
 import org.bukkit.DyeColor
 import org.bukkit.Material
 import org.bukkit.entity.*
@@ -49,7 +50,7 @@ interface MetaEditor {
                 // 基础类型
                 is Int, is Byte, is Float, is String -> MetaPrimitive(meta.key)
                 // 文本类型
-                is TextComponent -> MetaText(meta.key)
+                is ComponentText -> MetaText(meta.key)
                 // 材质相关
                 is ItemStack -> MetaItem(meta.key)
                 is MaterialData -> MetaItem.Mat(meta.key)
@@ -127,6 +128,8 @@ interface MetaEditor {
                 entity is AdyTextDisplay && key == "backgroundColor" -> MetaColor(key)
                 // 嗅探兽
                 entity is AdySniffer && key == "snifferState" -> MetaEnum(key, AdySniffer.State::class.java).nameToKey()
+                // BetterModel
+                entity is BetterModelView && key.equals("better-model", ignoreCase = true) -> MetaPrimitive("better-model")
                 // 实体
                 key == "pose" -> MetaEnum(key, BukkitPose::class.java).nameToKey()
                 // 不支持
