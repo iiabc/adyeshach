@@ -2,7 +2,6 @@ dependencies {
     compileOnly("org.ow2.asm:asm:9.1")
     compileOnly("com.eatthepath:fast-uuid:0.2.0")
     compileOnly(project(":project:common-impl-packetevents"))
-    compileOnly("com.github.retrooper:packetevents-spigot:2.11.2")
     compileOnly("ink.ptms.core:v11904:11904.2-minimize:mapped")
     compileOnly("net.md-5:bungeecord-chat:1.17")
     compileOnly("io.netty:netty-all:4.1.86.Final")

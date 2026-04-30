@@ -46,11 +46,6 @@ class AdyeshachPacketListener : SimplePacketListenerAbstract() {
                             val hand = wrapper.hand == InteractionHand.MAIN_HAND
                             submit { AdyeshachEntityInteractEvent(entity, player, hand, vector).call() }
                         }
-                        WrapperPlayClientInteractEntity.InteractAction.INTERACT -> {
-                            val vector = Vector(0, 0, 0)
-                            val hand = wrapper.hand == InteractionHand.MAIN_HAND
-                            submit { AdyeshachEntityInteractEvent(entity, player, hand, vector).call() }
-                        }
                         else -> {}
                     }
                 }

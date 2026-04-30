@@ -42,11 +42,9 @@ subprojects {
         compileOnly("org.spongepowered:math:2.0.1")
         // download
         compileOnly("com.github.ben-manes.caffeine:caffeine:2.9.3")
-        compileOnly("com.github.retrooper:packetevents-spigot:2.11.2")
+        compileOnly("com.github.retrooper:packetevents-spigot:2.12.1")
     }
-    tasks.withType<JavaCompile> {
-        options.encoding = "UTF-8"
-    }
+    tasks.withType<JavaCompile> { options.encoding = "UTF-8" }
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "1.8"
@@ -59,6 +57,4 @@ subprojects {
     }
 }
 
-gradle.buildFinished {
-    buildDir.deleteRecursively()
-}
+gradle.buildFinished { buildDir.deleteRecursively() }

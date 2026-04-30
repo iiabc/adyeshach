@@ -14,6 +14,7 @@ import ink.ptms.adyeshach.core.event.AdyeshachPlayerUUIDGenerateEvent
 import ink.ptms.adyeshach.core.util.getEnum
 import ink.ptms.adyeshach.impl.network.NetworkMineskin
 import ink.ptms.adyeshach.impl.util.ifTrue
+import java.util.*
 import org.bukkit.entity.Player
 import taboolib.common.platform.Schedule
 import taboolib.common.platform.function.submit
@@ -22,11 +23,9 @@ import taboolib.common5.cbool
 import taboolib.common5.cint
 import taboolib.module.chat.colored
 import taboolib.platform.util.onlinePlayers
-import java.util.*
 
 /**
- * Adyeshach
- * ink.ptms.adyeshach.impl.entity.type.DefaultHuman
+ * Adyeshach ink.ptms.adyeshach.impl.entity.type.DefaultHuman
  *
  * @author 坏黑
  * @since 2022/6/29 19:05
@@ -44,17 +43,12 @@ abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(enti
     internal var spawned = false
 
     /** 玩家信息 */
-    @Expose
-    internal val gameProfile = GameProfile()
+    @Expose internal val gameProfile = GameProfile()
 
     /** 是否睡眠 */
-    @Expose
-    internal var isSleepingLegacy = false
+    @Expose internal var isSleepingLegacy = false
 
-    /**
-     * 是否从玩家列表中移除
-     * 在 1.19.3 及以上版本中，通过修改 gameProfile 的 listed 属性实现列表隐藏
-     */
+    /** 是否从玩家列表中移除 在 1.19.3 及以上版本中，通过修改 gameProfile 的 listed 属性实现列表隐藏 */
     @Expose
     override var isHideFromTabList = true
         set(value) {
@@ -79,12 +73,22 @@ abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(enti
                 // 创建玩家信息
                 addPlayerInfo(viewer)
                 // 生成实体
-                Adyeshach.api().getMinecraftAPI().getEntitySpawner().spawnNamedEntity(viewer, index, pid, position.toLocation())
+                Adyeshach.api()
+                        .getMinecraftAPI()
+                        .getEntitySpawner()
+                        .spawnNamedEntity(viewer, index, pid, position.toLocation())
                 // 启用皮肤
                 setSkinEnabled(true)
                 // 修复装备无法正常显示的问题
                 submit(delay = 1) {
                     updateEquipment(viewer)
+                    // 强制客户端刷新主手物品渲染
+                    val metadataHandler =
+                            Adyeshach.api().getMinecraftAPI().getEntityMetadataHandler()
+                            viewer,
+                            index,
+                            listOf(metadataHandler.createByteMeta(8, handByte))
+                    )
                 }
                 // 更新状态
                 submit(delay = 5) {
@@ -113,38 +117,37 @@ abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(enti
 
     @Suppress("SpellCheckingInspection")
     override fun setCustomMeta(key: String, value: String?): Boolean {
-        super.setCustomMeta(key, value).ifTrue { return true }
+        super.setCustomMeta(key, value).ifTrue {
+            return true
+        }
         return when (key) {
-            "hidefromtablist", "ishidefromtablist", "hide_from_tab_list", "is_hide_from_tab_list" -> {
+            "hidefromtablist",
+            "ishidefromtablist",
+            "hide_from_tab_list",
+            "is_hide_from_tab_list" -> {
                 isHideFromTabList = value?.cbool ?: true
                 true
             }
-
             "name", "player_name", "playername" -> {
                 setName(value ?: "Adyeshach")
                 true
             }
-
             "ping", "player_ping", "playerping" -> {
                 setPing(value?.cint ?: 0)
                 true
             }
-
             "ping_bar", "playe_ping_bar", "playerpingbar", "pingbar" -> {
                 setPingBar(if (value != null) PingBar::class.java.getEnum(value) else PingBar.BAR_5)
                 true
             }
-
             "texture", "player_texture", "playertexture" -> {
                 setTexture(value ?: "")
                 true
             }
-
             "sleeping", "is_sleeping", "issleeping" -> {
                 setSleeping(value?.cbool ?: false)
                 true
             }
-
             else -> false
         }
     }
@@ -201,7 +204,9 @@ abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(enti
         if (NetworkMineskin.enableAshcon) {
             // 自动下载的玩家皮肤，会被分类到 ashcon 目录下
             if (skin.hasTexture("ashcon/$name") || !skin.hasTexture(name)) {
-                skin.getTexture("ashcon/$name").thenAccept { setTexture(it.value(), it.signature()) }
+                skin.getTexture("ashcon/$name").thenAccept {
+                    setTexture(it.value(), it.signature())
+                }
                 return
             }
         }
@@ -233,7 +238,10 @@ abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(enti
                 setPose(BukkitPose.SLEEPING)
             } else {
                 // 1.13.2 以下版本无法使用 setPose 设置睡眠状态
-                Adyeshach.api().getMinecraftAPI().getEntityOperator().updatePlayerSleeping(getVisiblePlayers(), index, position.toLocation())
+                Adyeshach.api()
+                        .getMinecraftAPI()
+                        .getEntityOperator()
+                        .updatePlayerSleeping(getVisiblePlayers(), index, position.toLocation())
             }
         } else {
             if (minecraftVersion >= 11400) {
@@ -301,45 +309,45 @@ abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(enti
                 }
             }
         }
-//
-//        var blocked = false
-//        var index = -99999
-//        val intercept = arrayListOf<Any>()
-//
-//        @Awake(LifeCycle.ENABLE)
-//        fun init() {
-//            simpleCommand("ady-test-npc") { sender, args ->
-//                blocked = true
-//                Adyeshach.api().getPublicEntityManager(ManagerType.TEMPORARY)
-//                    .create(EntityTypes.PLAYER, sender.cast<Player>().location) {
-//                        index = it.index
-//                    }
-//                submit(delay = 20) {
-//                    blocked = false
-//                }
-//            }
-//        }
-//
-//        @SubscribeEvent
-//        fun onSend(e: PacketSendEvent) {
-//            if (e.packet.name == "PacketPlayOutNamedEntitySpawn") {
-//                info("监测到 ${e.packet.name}, UUID: ${e.packet.read<UUID>("b")}")
-//                val dataWatcher = e.packet.read<Any>("h")
-//                info("dataWatcher: $dataWatcher")
-//                info("dataWatcher.entity: ${dataWatcher?.getProperty<Any>("c")}")
-//            }
-//            try {
-//                if (blocked || e.packet.read<Any>("a") == index) {
-//                    if (e.packet.name == "PacketPlayOutNamedEntitySpawn") {
-//                        info("放行 ${e.packet.name}")
-//                        // e.isCancelled = true
-//                    } else {
-//                        info("拦截 ${e.packet.name}")
-//                        e.isCancelled = true
-//                    }
-//                }
-//            } catch (_: Throwable) {
-//            }
-//        }
+        //
+        //        var blocked = false
+        //        var index = -99999
+        //        val intercept = arrayListOf<Any>()
+        //
+        //        @Awake(LifeCycle.ENABLE)
+        //        fun init() {
+        //            simpleCommand("ady-test-npc") { sender, args ->
+        //                blocked = true
+        //                Adyeshach.api().getPublicEntityManager(ManagerType.TEMPORARY)
+        //                    .create(EntityTypes.PLAYER, sender.cast<Player>().location) {
+        //                        index = it.index
+        //                    }
+        //                submit(delay = 20) {
+        //                    blocked = false
+        //                }
+        //            }
+        //        }
+        //
+        //        @SubscribeEvent
+        //        fun onSend(e: PacketSendEvent) {
+        //            if (e.packet.name == "PacketPlayOutNamedEntitySpawn") {
+        //                info("监测到 ${e.packet.name}, UUID: ${e.packet.read<UUID>("b")}")
+        //                val dataWatcher = e.packet.read<Any>("h")
+        //                info("dataWatcher: $dataWatcher")
+        //                info("dataWatcher.entity: ${dataWatcher?.getProperty<Any>("c")}")
+        //            }
+        //            try {
+        //                if (blocked || e.packet.read<Any>("a") == index) {
+        //                    if (e.packet.name == "PacketPlayOutNamedEntitySpawn") {
+        //                        info("放行 ${e.packet.name}")
+        //                        // e.isCancelled = true
+        //                    } else {
+        //                        info("拦截 ${e.packet.name}")
+        //                        e.isCancelled = true
+        //                    }
+        //                }
+        //            } catch (_: Throwable) {
+        //            }
+        //        }
     }
 }
