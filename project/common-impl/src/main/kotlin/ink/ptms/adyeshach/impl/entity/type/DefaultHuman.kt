@@ -82,13 +82,7 @@ abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(enti
                 // 修复装备无法正常显示的问题
                 submit(delay = 1) {
                     updateEquipment(viewer)
-                    // 强制客户端刷新主手物品渲染
-                    val metadataHandler =
-                            Adyeshach.api().getMinecraftAPI().getEntityMetadataHandler()
-                            viewer,
-                            index,
-                            listOf(metadataHandler.createByteMeta(8, handByte))
-                    )
+                    updateEntityMetadata(viewer)
                 }
                 // 更新状态
                 submit(delay = 5) {
