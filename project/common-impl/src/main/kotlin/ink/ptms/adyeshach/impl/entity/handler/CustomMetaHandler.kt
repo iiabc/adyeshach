@@ -2,7 +2,7 @@ package ink.ptms.adyeshach.impl.entity.handler
 
 import ink.ptms.adyeshach.core.AdyeshachSettings
 import ink.ptms.adyeshach.core.bukkit.BukkitPose
-import ink.ptms.adyeshach.core.entity.BetterModelView
+import ink.ptms.adyeshach.core.entity.ModelEngineOptions
 import ink.ptms.adyeshach.core.util.getEnum
 import ink.ptms.adyeshach.impl.entity.DefaultEntityInstance
 import org.bukkit.ChatColor
@@ -86,12 +86,11 @@ open class CustomMetaHandler(protected val self: DefaultEntityInstance) {
                 self.modelEngineName = value ?: ""
                 true
             }
-            // BetterModel (仅限 AdyInteraction)
-            "bettermodel", "better_model", "better-model" -> {
-                (self as? BetterModelView)?.let {
-                    it.betterModelName = value ?: ""
-                    true
-                } ?: false
+            // 模型引擎缩放
+            "modelenginescale", "modelengine_scale", "model_engine_scale" -> {
+                val options = self.modelEngineOptions ?: ModelEngineOptions()
+                options.scale = value?.cdouble ?: 0.0
+                true
             }
             // 冻结
             "freeze", "isfreeze", "is_freeze" -> {
