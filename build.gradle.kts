@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    id("io.izzel.taboolib") version "2.0.23" apply false
+    id("io.izzel.taboolib") version "2.0.37" apply false
     id("org.jetbrains.kotlin.jvm") version "1.9.24" apply false
 }
 
@@ -21,7 +21,7 @@ subprojects {
             install(BukkitNMSDataSerializer)
             // repoTabooLib = project.repositories.mavenLocal().url.toString()
         }
-        version { taboolib = "6.2.4-7bb45f0" }
+        version { taboolib = "6.3.0-afd75a7" }
     }
     repositories {
         mavenLocal()
