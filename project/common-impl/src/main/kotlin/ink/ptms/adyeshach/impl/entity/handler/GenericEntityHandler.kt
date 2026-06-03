@@ -52,8 +52,11 @@ open class GenericEntityHandler(protected val self: DefaultEntityInstance) {
     open fun isCustomNameVisible(): Boolean = self.getMetadata("isCustomNameVisible")
 
     open fun setCustomName(value: String) { self.setMetadata("customName", value) }
-    open fun getCustomName(): String = Components.toLegacyText(self.getMetadata("customName"))
-    open fun getCustomNameRaw(): String = self.getMetadata("customName")
+    open fun getCustomName(): String {
+        val value = self.getMetadata<Any?>("customName") ?: return ""
+        return Components.toLegacyText(value)
+    }
+    open fun getCustomNameRaw(): String = self.getMetadata<Any?>("customName")?.toString() ?: ""
 
     open fun setPose(pose: BukkitPose) { self.setMetadata("pose", pose) }
     open fun getPose(): BukkitPose = self.getMetadata("pose")

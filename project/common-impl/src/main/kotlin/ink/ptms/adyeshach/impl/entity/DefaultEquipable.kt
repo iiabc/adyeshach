@@ -29,7 +29,13 @@ interface DefaultEquipable : EntityEquipable {
         this as DefaultEntityLiving
         val operator = Adyeshach.api().getMinecraftAPI().getEntityOperator()
         val players = getVisiblePlayers()
-        val equipment = EquipmentSlot.values().associateWith { getEquipment(it) ?: ItemStack(Material.AIR) }.toMutableMap()
+        val equipment = EquipmentSlot.values()
+            .mapNotNull { slot -> getEquipment(slot)?.let { slot to it } }
+            .toMap()
+            .toMutableMap()
+        if (equipment.isEmpty()) {
+            equipment[EquipmentSlot.HAND] = ItemStack(Material.AIR)
+        }
         AdyeshachEntityEquipmentUpdateEvent(players, this, equipment).call()
         operator.updateEquipment(players, index, equipment)
     }
@@ -37,7 +43,13 @@ interface DefaultEquipable : EntityEquipable {
     override fun updateEquipment(player: Player) {
         this as DefaultEntityLiving
         val operator = Adyeshach.api().getMinecraftAPI().getEntityOperator()
-        val equipment = EquipmentSlot.values().associateWith { getEquipment(it) ?: ItemStack(Material.AIR) }.toMutableMap()
+        val equipment = EquipmentSlot.values()
+            .mapNotNull { slot -> getEquipment(slot)?.let { slot to it } }
+            .toMap()
+            .toMutableMap()
+        if (equipment.isEmpty()) {
+            equipment[EquipmentSlot.HAND] = ItemStack(Material.AIR)
+        }
         AdyeshachEntityEquipmentUpdateEvent(listOf(player), this, equipment).call()
         operator.updateEquipment(player, index, equipment)
     }

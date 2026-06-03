@@ -1,5 +1,7 @@
 package ink.ptms.adyeshach.impl.pe
 
+import com.github.retrooper.packetevents.PacketEvents
+import com.github.retrooper.packetevents.manager.server.ServerVersion
 import com.github.retrooper.packetevents.protocol.player.Equipment
 import com.github.retrooper.packetevents.protocol.player.EquipmentSlot
 import com.github.retrooper.packetevents.protocol.world.Location
@@ -25,6 +27,7 @@ import ink.ptms.adyeshach.core.MinecraftEntityOperator
 import ink.ptms.adyeshach.core.bukkit.BukkitAnimation
 import ink.ptms.adyeshach.core.MinecraftMeta
 import org.bukkit.Location as BukkitLocation
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.EquipmentSlot as BukkitEquipmentSlot
 import org.bukkit.inventory.ItemStack
@@ -86,6 +89,14 @@ class PEEntityOperator : MinecraftEntityOperator {
     override fun updateEquipment(player: List<Player>, entityId: Int, equipment: Map<BukkitEquipmentSlot, ItemStack>) {
         val peEquipment = equipment.map { (slot, item) ->
             Equipment(slotFromBukkit(slot), SpigotConversionUtil.fromBukkitItemStack(item))
+        }.toMutableList()
+        // 1.21.4+ 新增了 BODY 装备槽位，Set Equipment 包中必须包含该槽位，
+        // 否则客户端不会渲染主手物品
+        if (PacketEvents.getAPI().serverManager.version.isNewerThanOrEquals(ServerVersion.V_1_21_4)) {
+            val hasBody = peEquipment.any { it.slot == EquipmentSlot.BODY }
+            if (!hasBody) {
+                peEquipment.add(Equipment(EquipmentSlot.BODY, SpigotConversionUtil.fromBukkitItemStack(ItemStack(Material.AIR))))
+            }
         }
         val packet = WrapperPlayServerEntityEquipment(entityId, peEquipment)
         packetHandler.sendPacket(player, packet)
