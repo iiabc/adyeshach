@@ -13,6 +13,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEn
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation.EntityAnimationType
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityEquipment
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityHeadLook
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerHurtAnimation
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMove
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMoveAndRotation
@@ -79,6 +80,11 @@ class PEEntityOperator : MinecraftEntityOperator {
 
     override fun updateHeadRotation(player: List<Player>, entityId: Int, yaw: Float) {
         val packet = WrapperPlayServerEntityHeadLook(entityId, yaw)
+        packetHandler.sendPacket(player, packet)
+    }
+
+    override fun updateHurtAnimation(player: List<Player>, entityId: Int, yaw: Float) {
+        val packet = WrapperPlayServerHurtAnimation(entityId, yaw)
         packetHandler.sendPacket(player, packet)
     }
 
